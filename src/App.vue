@@ -26,32 +26,58 @@
       <!-- The canvas for our pattern -->
       <rect x="0" y="0" width="100%" height="100%" fill="url(#pattern-cubes)" />
     </svg>
-    <svg
-      :style="`position:absolute; left:0; top: ${87.5 *cubeSizeFactor + 1.6*125*cubeSizeFactor * cubePositionY};`"
-      patternUnits="userSpaceOnUse"
-      :width="125*cubeSizeFactor"
-      :height="200*cubeSizeFactor"
-      viewBox="0 0 10 16"
-    >
-      <path class="up-shade-unit" d="M 2.8e-7,3.0051119 5,0.00511184 10,3.0051119 5,6.0" />
-      <path class="right-shade-unit" d="m 10,3.0051119 -5,3 V 11.005112 L 10,8.0051119" />
-      <path
-        class="left-shade-unit"
-        d="m 2.78e-7,3.0051119 5.00000002000001,3 V 11.005112 L 2.78e-7,8.0051119 Z"
-      />
-    </svg>
+    <template v-for="row in matrix">
+      <template v-for="element in row">
+        <svg
+          v-bind:key="element.posX + ' ' + element.posY"
+          :style="`position:absolute; left:${getPositionX(element.posX, element.posY)}; top: ${getPositionY(element.posY)};`"
+          patternUnits="userSpaceOnUse"
+          :width="125*cubeSizeFactor"
+          :height="200*cubeSizeFactor"
+          viewBox="0 0 10 16"
+        >
+          <path :fill="element.color" d="M 2.8e-7,3.0051119 5,0.00511184 10,3.0051119 5,6.0" />
+          <path :fill="element.color" d="m 10,3.0051119 -5,3 V 11.005112 L 10,8.0051119" />
+          <path
+            :fill="element.color"
+            d="m 2.78e-7,3.0051119 5.00000002000001,3 V 11.005112 L 2.78e-7,8.0051119 Z"
+          />
+        </svg>
+      </template>
+    </template>
   </div>
 </template>
 
 <script>
-import { win32 } from "path";
+import Playground from "./model/Playground";
+const playground = new Playground({ width: 10, height: 10 });
+playground.changeCubeColor(2);
+
 export default {
   name: "app",
   data: () => {
     return {
       cubeSizeFactor: window.innerWidth / 1920,
-      cubePositionY: 1
+      cubePositionY: 1,
+      matrix: playground.getMatrixOfCubes()
     };
+  },
+  methods: {
+    getPositionX(posX, posY) {
+      if (posY % 2 == 0) {
+        return 125 * this.cubeSizeFactor * posX;
+      } else {
+        return (
+          0.5 * 125 * this.cubeSizeFactor + 125 * this.cubeSizeFactor * posX
+        );
+      }
+    },
+    getPositionY(posY) {
+      return (
+        87.5 * this.cubeSizeFactor +
+        0.5 * 1.6 * 125 * this.cubeSizeFactor * posY
+      );
+    }
   },
   mounted() {
     window.onresize = () => {
