@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <svg width="100%" height="100%" style="position:absolute; z-index: -1;">
+    <svg width="100%" height="100%" style="position:absolute; z-index: 0;">
       <!-- Define the pattern -->
       <pattern
         id="pattern-cubes"
@@ -50,7 +50,7 @@ export default {
   data: () => {
     return {
       cubeSizeFactor: window.innerWidth / 1920,
-      cubePositionY: 2
+      cubePositionY: 1
     };
   },
   mounted() {
@@ -69,27 +69,28 @@ html {
 }
 #app {
   height: 100%;
+  background-color: lightgrey;
 }
 $fill: gray;
 $fill-unit: orange;
 
 .left-shade {
-  fill: $fill;
+  fill: lighten($fill, 40%);
 }
 
 .right-shade {
-  fill: lighten($fill, 30%);
+  fill: lighten($fill, 60%);
 }
 
 .left-shade-unit {
-  fill: $fill-unit;
+  fill: lighten($fill-unit, 20%);
 }
 
 .right-shade-unit {
-  fill: lighten($fill-unit, 30%);
+  fill: lighten($fill-unit, 40%);
 }
 
 .up-shade-unit {
-  fill: lighten($fill-unit, 40%);
+  fill: lighten($fill-unit, 10%);
 }
 </style>
