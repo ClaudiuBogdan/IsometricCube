@@ -1,3 +1,5 @@
+import Color from "color";
+
 export default class Playgound {
     matrixOfCubes = [];
     constructor(config) {
@@ -13,15 +15,25 @@ export default class Playgound {
         for (let i = 0; i < n; i++) {
             const row = [];
             for (let j = 0; j < m; j++) {
+                const mainColor = this.getRandomColor();
                 const element = {
-                    color: this.getRandomColor(),
+                    color: {
+                        right: mainColor,
+                        left: mainColor,
+                        up: mainColor,
+                    },
                     animation: null,
                     posX: i,
                     posY: j,
                 };
                 setInterval(() => {
-                    element.color = this.getRandomColor();
-                }, Math.ceil(Math.random() * 2000));
+                    const mainColor = this.getRandomColor();
+                    element.color = {
+                        right: mainColor,
+                        left: Color(mainColor).lighten(0.2),
+                        up: Color(mainColor).darken(0.2),
+                    };
+                }, Math.ceil(Math.random() * 1000 + 1000));
                 row.push(element);
             }
             matrix.push(row);

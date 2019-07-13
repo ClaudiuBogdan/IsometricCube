@@ -36,10 +36,10 @@
           :height="200*cubeSizeFactor"
           viewBox="0 0 10 16"
         >
-          <path :fill="element.color" d="M 2.8e-7,3.0051119 5,0.00511184 10,3.0051119 5,6.0" />
-          <path :fill="element.color" d="m 10,3.0051119 -5,3 V 11.005112 L 10,8.0051119" />
+          <path :fill="element.color.up" d="M 2.8e-7,3.0051119 5,0.00511184 10,3.0051119 5,6.0" />
+          <path :fill="element.color.left" d="m 10,3.0051119 -5,3 V 11.005112 L 10,8.0051119" />
           <path
-            :fill="element.color"
+            :fill="element.color.right"
             d="m 2.78e-7,3.0051119 5.00000002000001,3 V 11.005112 L 2.78e-7,8.0051119 Z"
           />
         </svg>
