@@ -1,50 +1,7 @@
 <template>
   <div id="app">
-    <svg width="100%" height="100%" style="position:absolute; z-index: 0;">
-      <!-- Define the pattern -->
-      <pattern
-        id="pattern-cubes"
-        x="0"
-        :y="125*cubeSizeFactor"
-        patternUnits="userSpaceOnUse"
-        :width="125*cubeSizeFactor"
-        :height="200*cubeSizeFactor"
-        viewBox="0 0 10 16"
-      >
-        <!-- Cube code courtest of SVGeneration: http://www.svgeneration.com/recipes/3D-Cubes/ -->
-        <g id="cube">
-          <!-- We'll apply the `fill` in the CSS for flexibility -->
-          <path class="left-shade" d="M0 0l5 3v5l-5 -3z" />
-          <path class="right-shade" d="M10 0l-5 3v5l5 -3" />
-        </g>
-
-        <!-- Apply the cube shapes -->
-        <use x="5" y="8" xlink:href="#cube" />
-        <use x="-5" y="8" xlink:href="#cube" />
-      </pattern>
-
-      <!-- The canvas for our pattern -->
-      <rect x="0" y="0" width="100%" height="100%" fill="url(#pattern-cubes)" />
-    </svg>
-    <template v-for="row in matrix">
-      <template v-for="element in row">
-        <svg
-          v-bind:key="element.posX + ' ' + element.posY"
-          :style="`position:absolute; left:${getPositionX(element.posX, element.posY)}; top: ${getPositionY(element.posY)};`"
-          patternUnits="userSpaceOnUse"
-          :width="125*cubeSizeFactor"
-          :height="200*cubeSizeFactor"
-          viewBox="0 0 10 16"
-        >
-          <path :fill="element.color.up" d="M 2.8e-7,3.0051119 5,0.00511184 10,3.0051119 5,6.0" />
-          <path :fill="element.color.left" d="m 10,3.0051119 -5,3 V 11.005112 L 10,8.0051119" />
-          <path
-            :fill="element.color.right"
-            d="m 2.78e-7,3.0051119 5.00000002000001,3 V 11.005112 L 2.78e-7,8.0051119 Z"
-          />
-        </svg>
-      </template>
-    </template>
+    <img src="./assets/logo.png" alt style="width: 100%" />
+    <img src="./assets/paint.jpg" alt style="width: 100%" class="img" />
   </div>
 </template>
 
@@ -88,35 +45,50 @@ export default {
 </script>
 
 <style lang="scss">
-body,
-html {
+html,
+body {
+  width: 100%;
   height: 100%;
-  margin: 0;
 }
-#app {
-  height: 100%;
-  background-color: lightgrey;
+div,
+img {
+  position: absolute;
+  width: 100%;
 }
-$fill: gray;
-$fill-unit: orange;
+// .img {
+//   mask-image: linear-gradient(
+//     -45deg,
+//     rgba(0, 0, 0, 1),
+//     rgba(0, 0, 0, 1),
+//     rgba(0, 0, 0, 1),
+//     rgba(0, 0, 0, 0),
+//     rgba(0, 0, 0, 0)
+//   );
+// }
+@keyframes wipe {
+  0% {
+    mask-position: 0 0;
+  }
+  100% {
+    mask-position: -100vw -100vh;
+  }
+}
 
-.left-shade {
-  fill: lighten($fill, 40%);
-}
-
-.right-shade {
-  fill: lighten($fill, 60%);
-}
-
-.left-shade-unit {
-  fill: lighten($fill-unit, 20%);
-}
-
-.right-shade-unit {
-  fill: lighten($fill-unit, 40%);
-}
-
-.up-shade-unit {
-  fill: lighten($fill-unit, 10%);
+/* Second one is on top */
+img:nth-child(2) {
+  animation: wipe 6s infinite;
+  animation-delay: 1s;
+  animation-direction: alternate;
+  mask-size: 200vw 200vh;
+  mask-image: -webkit-gradient(
+    linear,
+    left top,
+    right bottom,
+    color-stop(0, rgba(0, 0, 0, 1)),
+    color-stop(0.45, rgba(0, 0, 0, 1)),
+    color-stop(0.5, rgba(0, 0, 0, 0)),
+    color-stop(0.55, rgba(0, 0, 0, 0)),
+    color-stop(1, rgba(0, 0, 0, 0))
+  );
 }
 </style>
