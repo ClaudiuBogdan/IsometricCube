@@ -27,7 +27,7 @@ export default class Playgound {
                     },
                     animation: {
                         startAnimation: () => {
-                            intervalAnimation = setInterval(() => {
+                            intervalAnimation = setInterval(async () => {
                                 const mainColor = this.getRandomColor();
                                 element.color = {
                                     main: mainColor,
@@ -36,6 +36,17 @@ export default class Playgound {
                                     up: Color(mainColor).darken(0.2),
                                     alpha: 1,
                                 };
+                                await new Promise((resolve, reject) =>
+                                    setTimeout(resolve, 500)
+                                );
+                                anime({
+                                    targets: element.color,
+                                    alpha: 0,
+                                    easing: "linear",
+                                    update: function() {
+                                        element.updateColor();
+                                    },
+                                });
                             }, Math.ceil(Math.random() * 1000 + 1000));
                         },
                         stopAnimation() {
@@ -47,19 +58,7 @@ export default class Playgound {
                                     alpha: 0,
                                     easing: "linear",
                                     update: function() {
-                                        element.color.right = Color(
-                                            element.color.main
-                                        ).alpha(element.color.alpha);
-                                        element.color.left = Color(
-                                            element.color.main
-                                        )
-                                            .alpha(element.color.alpha)
-                                            .lighten(0.2);
-                                        element.color.up = Color(
-                                            element.color.main
-                                        )
-                                            .alpha(element.color.alpha)
-                                            .darken(0.2);
+                                        element.updateColor();
                                     },
                                 });
                             }
@@ -67,8 +66,20 @@ export default class Playgound {
                     },
                     posX: i,
                     posY: j,
+                    updateColor: (
+                        color = element.color.main,
+                        alpha = element.color.alpha
+                    ) => {
+                        element.color.right = Color(color).alpha(alpha);
+                        element.color.left = Color(color)
+                            .alpha(alpha)
+                            .lighten(0.2);
+                        element.color.up = Color(color)
+                            .alpha(alpha)
+                            .darken(0.2);
+                    },
                 };
-
+                element.animation.startAnimation();
                 row.push(element);
             }
             matrix.push(row);

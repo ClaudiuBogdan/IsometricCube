@@ -4,11 +4,11 @@
       <!-- Define the pattern -->
       <pattern
         id="pattern-cubes"
-        x="0"
-        :y="125*cubeSizeFactor"
+        :x="initialPosX"
+        :y="cubeSizeFactor + initialPosY"
         patternUnits="userSpaceOnUse"
-        :width="125*cubeSizeFactor"
-        :height="200*cubeSizeFactor"
+        :width="cubeSizeFactor"
+        :height="1.6*cubeSizeFactor"
         viewBox="0 0 10 16"
       >
         <!-- Cube code courtest of SVGeneration: http://www.svgeneration.com/recipes/3D-Cubes/ -->
@@ -32,8 +32,8 @@
           v-bind:key="element.posX + ' ' + element.posY"
           :style="`position:absolute; left:${getPositionX(element.posX, element.posY)}; top: ${getPositionY(element.posY)};`"
           patternUnits="userSpaceOnUse"
-          :width="125*cubeSizeFactor"
-          :height="200*cubeSizeFactor"
+          :width="cubeSizeFactor"
+          :height="1.6*cubeSizeFactor"
           viewBox="0 0 10 16"
         >
           <path :fill="element.color.up" d="M 2.8e-7,3.0051119 5,0.00511184 10,3.0051119 5,6.0" />
@@ -58,36 +58,48 @@ export default {
   name: "app",
   data: () => {
     return {
-      cubeSizeFactor: window.innerWidth / 1920,
-      cubePositionY: 1,
+      cubeSizeFactor: 0,
+      initialPosY: 0,
+      initialPosX: 0,
       matrix: playground.getMatrixOfCubes()
     };
   },
   methods: {
+    initializeParams() {
+      this.cubeSizeFactor = this.calculateCubeSize();
+      this.initialPosX =
+        (window.innerWidth - (10 + 0.5) * this.cubeSizeFactor) / 2;
+      this.initialPosY = window.innerHeight / 4;
+    },
     getPositionX(posX, posY) {
       if (posY % 2 == 0) {
-        return 125 * this.cubeSizeFactor * posX;
+        return this.initialPosX + this.cubeSizeFactor * posX;
       } else {
         return (
-          0.5 * 125 * this.cubeSizeFactor + 125 * this.cubeSizeFactor * posX
+          this.initialPosX +
+          0.5 * this.cubeSizeFactor +
+          this.cubeSizeFactor * posX
         );
       }
     },
     getPositionY(posY) {
       return (
-        87.5 * this.cubeSizeFactor +
-        0.5 * 1.6 * 125 * this.cubeSizeFactor * posY
+        this.initialPosY +
+        0.7 * this.cubeSizeFactor +
+        0.8 * this.cubeSizeFactor * posY
       );
+    },
+    calculateCubeSize() {
+      const multiplayer = window.innerWidth > 1000 ? 0.5 * 125 : 125;
+      const cubeSizeFactor = (multiplayer * window.innerWidth) / 1920;
+      return cubeSizeFactor;
     }
   },
   mounted() {
+    this.initializeParams();
     window.onresize = () => {
-      this.cubeSizeFactor = window.innerWidth / 1920;
+      this.initializeParams();
     };
-    this.matrix[0][0].animation.startAnimation();
-    setTimeout(() => {
-      this.matrix[0][0].animation.stopAnimation();
-    }, 5000);
   }
 };
 </script>
