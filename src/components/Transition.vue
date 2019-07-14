@@ -1,15 +1,11 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png" alt style="width: 100%" />
-    <img src="./assets/paint.jpg" alt style="width: 100%" class="img" />
+    <img src="../assets/logo.png" alt style="width: 100%" />
+    <img src="../assets/paint.jpg" alt style="width: 100%" class="img" />
   </div>
 </template>
 
 <script>
-import Playground from "./model/Playground";
-const playground = new Playground({ width: 10, height: 10 });
-playground.changeCubeColor(2);
-
 export default {
   name: "app",
   data: () => {

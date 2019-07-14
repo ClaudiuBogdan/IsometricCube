@@ -49,7 +49,8 @@
 </template>
 
 <script>
-import Playground from "./model/Playground";
+import Playground from "../model/Playground";
+import { setTimeout } from "timers";
 const playground = new Playground({ width: 10, height: 10 });
 playground.changeCubeColor(2);
 
@@ -83,6 +84,10 @@ export default {
     window.onresize = () => {
       this.cubeSizeFactor = window.innerWidth / 1920;
     };
+    this.matrix[0][0].animation.startAnimation();
+    setTimeout(() => {
+      this.matrix[0][0].animation.stopAnimation();
+    }, 5000);
   }
 };
 </script>
